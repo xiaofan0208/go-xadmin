@@ -14,5 +14,7 @@ func init() {
 func Router() {
 	beego.Router("/admin", &controllers.AdminIndexController{}, "*:Index")
 
+	beego.Router("/admin/login", &controllers.SignInController{})
+
 	beego.Router("/admin/backenduser", &controllers.BackenduserController{}, "*:Index")
 }

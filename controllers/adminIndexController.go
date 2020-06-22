@@ -8,7 +8,6 @@ type AdminIndexController struct {
 // Index index
 func (ctl *AdminIndexController) Index() {
 
-	ctl.Layout = "admin/base/layout.html"
-	ctl.TplName = "admin/index.html"
+	ctl.SetTpl("admin/index.html", "admin/base/layout.html")
 
 }
