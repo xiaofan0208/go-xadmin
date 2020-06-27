@@ -1,5 +1,7 @@
 package controllers
 
+import "github.com/xiaofan0208/xadmin/models"
+
 //BaseAdminController 后台控制器
 type BaseAdminController struct {
 	BaseController
@@ -9,6 +11,11 @@ type BaseAdminController struct {
 func (ctl *BaseAdminController) Prepare() {
 	ctl.BaseController.Prepare()
 
+	user := ctl.GetSession("User")
+	if user != nil {
+		ctl.User = user.(*models.Backenduser)
+		ctl.Data["User"] = ctl.User
+	}
 }
 
 // SetTpl 设置布局文件
