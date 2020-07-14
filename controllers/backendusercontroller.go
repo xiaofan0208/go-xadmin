@@ -1,5 +1,14 @@
 package controllers
 
+import (
+	"encoding/json"
+	"strconv"
+	"strings"
+
+	"github.com/astaxie/beego"
+	"github.com/xiaofan0208/xadmin/models"
+)
+
 // BackenduserController 管理员
 type BackenduserController struct {
 	BaseAdminController
@@ -7,11 +16,105 @@ type BackenduserController struct {
 
 // Index index
 func (ctl *BackenduserController) Index() {
-	ctl.Data["PageName"] = "管理员列表"
-	ctl.SetTpl("admin/user/list.html", "admin/base/layout.html")
+	ctl.Data["PageName"] = "管理员"
+	ctl.Data["PageDesc"] = "列表"
+	ctl.Data["ShowSearch"] = true // 是否显示搜索框
+
+	ctl.SetTpl("", "admin/base/list_view.html")
 
 	ctl.LayoutSections = make(map[string]string)
-	ctl.LayoutSections["HtmlHead"] = "admin/user/list_headcss.html"
 	ctl.LayoutSections["FooterScripts"] = "admin/user/list_footerjs.html"
+	ctl.LayoutSections["LayoutSearch"] = "admin/user/list_search.html"
+}
 
+// PostList PostList
+func (ctl *BackenduserController) PostList() {
+	limit, _ := ctl.GetInt("limit", 0)
+	offset, _ := ctl.GetInt("offset", 0)
+	sort := ctl.GetString("sort")
+	sortOrder := ctl.GetString("sortOrder")
+
+	query := make(map[string]interface{})
+	exclude := make(map[string]interface{})
+	var orders []string
+
+	// 关键字搜索
+	search := ctl.GetString("search")
+	params := make(map[string]interface{})
+	if strings.TrimSpace(search) != "" {
+		err := json.Unmarshal([]byte(search), &params)
+		if err != nil {
+			beego.Error("json.Unmarshal:", err.Error())
+		}
+	}
+
+	if _, ok := params["id"]; ok {
+		query["Id"] = params["id"]
+	}
+	if _, ok := params["name"]; ok {
+		query["Name"] = params["name"]
+	}
+
+	query["Deleted"] = false
+	// 排序
+	if sortOrder == "" {
+		sortOrder = "asc"
+	}
+	if sort != "" {
+		if sortOrder == "desc" {
+			sort = "-" + sort
+		}
+		orders = append(orders, sort)
+	}
+
+	result, err := ctl.querylist(query, exclude, orders, uint8(limit), uint8(offset))
+	if err != nil {
+		beego.Error("ctl.querylist:", err.Error())
+	}
+
+	ctl.Data["json"] = result
+	ctl.ServeJSON()
+}
+
+func (ctl *BackenduserController) querylist(params map[string]interface{}, exclude map[string]interface{}, orders []string, limit uint8, offset uint8) (*models.ResponseResult, error) {
+	records, total, err := models.GetAllBackenduserList(params, exclude, orders, limit, offset)
+	if err != nil {
+		beego.Error("models.GetAllBackenduserList", err.Error())
+		return nil, err
+	}
+	tablelines := make([]interface{}, 0)
+	for _, record := range records {
+		one := make(map[string]interface{})
+		one["Id"] = record.Id
+		one["Name"] = record.Name
+		one["Email"] = record.Email
+		one["IsAdmin"] = record.IsAdmin
+		tablelines = append(tablelines, one)
+	}
+	result := &models.ResponseResult{
+		Total: total,
+		Rows:  tablelines,
+	}
+
+	return result, err
+}
+
+// DeleteBatch 批量删除
+func (ctl *BackenduserController) DeleteBatch() {
+	ids := strings.TrimSpace(ctl.GetString("ids"))
+	if ids == "" {
+		ctl.ResponseError(nil)
+		return
+	}
+	idsArr := strings.Split(ids, ",")
+	for _, id := range idsArr {
+		idInt64, _ := strconv.ParseInt(id, 10, 64)
+		err := models.DeleteBackenduserByID(idInt64)
+		if err != nil {
+			beego.Error("models.DeleteBackenduserByID:", err.Error())
+			ctl.ResponseError(err.Error())
+			return
+		}
+	}
+	ctl.ResponseSuccess(nil)
 }

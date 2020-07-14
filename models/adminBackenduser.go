@@ -128,3 +128,88 @@ func GetBackenduserByParam(params map[string]interface{}, offset int64, limit in
 
 	return users, total, nil
 }
+
+//GetAllBackenduserList 获取所有列表
+func GetAllBackenduserList(params map[string]interface{}, exclude map[string]interface{}, orders []string, limit uint8, offset uint8) ([]*Backenduser, int64, error) {
+	o := orm.NewOrm()
+	qs := o.QueryTable(new(Backenduser))
+	var records []*Backenduser
+	var err error
+	var count int64
+	// 过滤
+	for k, v := range exclude {
+		qs = qs.Exclude(k, v)
+	}
+	// 查询参数
+	for k, v := range params {
+		qs = qs.Filter(k, v)
+	}
+
+	// 排序
+	qs = qs.OrderBy(orders...)
+
+	// 分页
+	if limit == 0 {
+		limit = 20
+	}
+	qs = qs.Limit(limit, offset)
+	qs = qs.Distinct()
+
+	count, err = qs.Count()
+	if err != nil {
+		return records, count, err
+	}
+
+	if _, err = qs.All(&records); err == nil {
+
+	}
+	// 没有找到
+	if err == orm.ErrNoRows {
+		return records, count, nil
+	}
+	return records, count, err
+}
+
+// UpdateBackenduser 更新
+func UpdateBackenduser(record *Backenduser, fields []string) (int64, error) {
+	o := orm.NewOrm()
+	var (
+		num int64
+		err error
+	)
+	if err = o.Read(&record); err == nil {
+		if num, err = o.Update(&record, fields...); err == nil {
+		}
+	} else if err == orm.ErrNoRows {
+		// 未查询到
+		return num, nil
+	}
+	return num, err
+}
+
+// DeleteBackenduser 物理删除
+func DeleteBackenduser(id int64) (int64, error) {
+	o := orm.NewOrm()
+	var (
+		num int64
+		err error
+	)
+	if num, err = o.Delete(&Backenduser{Id: id}); err == nil {
+		return num, err
+	}
+	return num, nil
+}
+
+// DeleteBackenduserByID 逻辑删除
+func DeleteBackenduserByID(id int64) error {
+	o := orm.NewOrm()
+	record := Backenduser{Id: id}
+	record.Deleted = true
+	record.Updated = utils.NowMillis()
+
+	var err error
+	if _, err = o.Update(&record, "Deleted", "Updated"); err == nil {
+		return nil
+	}
+	return err
+}

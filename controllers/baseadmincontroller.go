@@ -1,6 +1,10 @@
 package controllers
 
-import "github.com/xiaofan0208/xadmin/models"
+import (
+	"strings"
+
+	"github.com/xiaofan0208/xadmin/models"
+)
 
 //BaseAdminController 后台控制器
 type BaseAdminController struct {
@@ -21,6 +25,7 @@ func (ctl *BaseAdminController) Prepare() {
 // SetTpl 设置布局文件
 func (ctl *BaseAdminController) SetTpl(tpl ...string) {
 	baselayout := "admin/base/layout.html"
+	var tplName string
 	switch len(tpl) {
 	case 1:
 		ctl.TplName = tpl[0]
@@ -31,4 +36,8 @@ func (ctl *BaseAdminController) SetTpl(tpl ...string) {
 		ctl.Layout = tpl[1]
 		break
 	}
+	if strings.TrimSpace(tplName) == "" {
+		tplName = "admin/base/empty.html"
+	}
+	ctl.TplName = tplName
 }

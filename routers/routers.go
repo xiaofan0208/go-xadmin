@@ -17,5 +17,6 @@ func Router() {
 	beego.InsertFilter("/admin/*", beego.BeforeRouter, LoginFilterFunc)
 	beego.Router("/admin", &controllers.AdminIndexController{}, "*:Index")
 	beego.Router("/admin/backenduser", &controllers.BackenduserController{}, "*:Index")
-
+	beego.Router("/admin/backenduser/list", &controllers.BackenduserController{}, "*:PostList")
+	beego.Router("/admin/backenduser/delete", &controllers.BackenduserController{}, "*:DeleteBatch")
 }

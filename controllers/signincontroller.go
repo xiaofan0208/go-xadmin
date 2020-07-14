@@ -19,6 +19,12 @@ func (ctl *SignInController) Get() {
 		ctl.Redirect("/admin", 302)
 	}
 	ctl.TplName = "admin/signin/login.html"
+
+	redirectTo := ctl.GetString("redirect_to", "")
+	if redirectTo != "" {
+		redirectTo = "?redirect_to=" + redirectTo
+	}
+	ctl.Data["LoginURL"] = ctl.URLFor(".Get") + redirectTo
 }
 
 // Post 登录
