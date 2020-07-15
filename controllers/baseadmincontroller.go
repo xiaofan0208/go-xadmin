@@ -28,16 +28,17 @@ func (ctl *BaseAdminController) SetTpl(tpl ...string) {
 	var tplName string
 	switch len(tpl) {
 	case 1:
-		ctl.TplName = tpl[0]
-		ctl.Layout = baselayout
+		tplName = tpl[0]
+		baselayout = baselayout
 		break
 	case 2:
-		ctl.TplName = tpl[0]
-		ctl.Layout = tpl[1]
+		tplName = tpl[0]
+		baselayout = tpl[1]
 		break
 	}
 	if strings.TrimSpace(tplName) == "" {
 		tplName = "admin/base/empty.html"
 	}
 	ctl.TplName = tplName
+	ctl.Layout = baselayout
 }

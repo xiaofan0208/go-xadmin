@@ -20,7 +20,7 @@ func (ctl *BackenduserController) Index() {
 	ctl.Data["PageDesc"] = "列表"
 	ctl.Data["ShowSearch"] = true // 是否显示搜索框
 
-	ctl.SetTpl("", "admin/base/list_view.html")
+	ctl.SetTpl("", "admin/base/base_list_view.html")
 
 	ctl.LayoutSections = make(map[string]string)
 	ctl.LayoutSections["FooterScripts"] = "admin/user/list_footerjs.html"
@@ -117,4 +117,28 @@ func (ctl *BackenduserController) DeleteBatch() {
 		}
 	}
 	ctl.ResponseSuccess(nil)
+}
+
+// Edit 编辑
+func (ctl *BackenduserController) Edit() {
+	ctl.Data["PageName"] = "管理员"
+	ctl.Data["PageDesc"] = "编辑"
+
+	id := ctl.Ctx.Input.Param(":id")
+	if idInt64, err := strconv.ParseInt(id, 10, 64); err != nil {
+		ctl.Data["PageError"] = err.Error()
+	} else {
+		if record, err := models.GetBackenduserByID(idInt64); err != nil {
+			ctl.Data["PageError"] = err.Error()
+		} else {
+			ctl.Data["Record"] = record
+		}
+	}
+
+	ctl.SetTpl("admin/user/edit_form.html", "admin/base/base_edit_view.html")
+
+	ctl.LayoutSections = make(map[string]string)
+	ctl.LayoutSections["HeadCSS"] = "admin/user/edit_headcss.html"
+	ctl.LayoutSections["FooterScripts"] = "admin/user/edit_footerjs.html"
+
 }

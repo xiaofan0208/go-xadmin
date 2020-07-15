@@ -41,7 +41,7 @@ func init() {
 
 // GetBackenduserByID get
 func GetBackenduserByID(id int64) (*Backenduser, error) {
-	var user *Backenduser
+	user := Backenduser{}
 	o := orm.NewOrm()
 	// 获取 QuerySeter 对象，user 为表名
 	qs := o.QueryTable(new(Backenduser))
@@ -53,7 +53,7 @@ func GetBackenduserByID(id int64) (*Backenduser, error) {
 	if err != nil {
 		return nil, err
 	}
-	return user, nil
+	return &user, nil
 }
 
 // CheckUserByName get
