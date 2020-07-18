@@ -121,8 +121,16 @@ func (ctl *BackenduserController) DeleteBatch() {
 
 // Edit 编辑
 func (ctl *BackenduserController) Edit() {
+	if ctl.Ctx.Request.Method == "POST" {
+		ctl.PostEdit()
+		return
+	}
 	ctl.Data["PageName"] = "管理员"
 	ctl.Data["PageDesc"] = "编辑"
+
+	ctl.Data["canDelete"] = true
+	ctl.Data["listURL"] = ctl.URLFor(".Index")
+	ctl.Data["formURL"] = ctl.URLFor(".Edit")
 
 	id := ctl.Ctx.Input.Param(":id")
 	if idInt64, err := strconv.ParseInt(id, 10, 64); err != nil {
@@ -141,4 +149,21 @@ func (ctl *BackenduserController) Edit() {
 	ctl.LayoutSections["HeadCSS"] = "admin/user/edit_headcss.html"
 	ctl.LayoutSections["FooterScripts"] = "admin/user/edit_footerjs.html"
 
+}
+
+//PostEdit PostEdit
+func (ctl *BackenduserController) PostEdit() {
+	record := &models.Backenduser{}
+	if err := ctl.ParseForm(record); err != nil {
+		beego.Error("ctl.ParseForm : ", err.Error())
+		ctl.ResponseError(nil)
+		return
+	}
+
+	if _, err := models.UpdateBackenduserByField(record, models.BackenduserUpdateFields...); err != nil {
+		beego.Error("models.UpdateBackenduserByField: ", err.Error())
+		ctl.ResponseError(nil)
+		return
+	}
+	ctl.ResponseSuccess(nil)
 }

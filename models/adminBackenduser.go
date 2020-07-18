@@ -23,6 +23,9 @@ type Backenduser struct {
 	Updated  int64  `orm:"column(updated)" json:"updated"`   // 更新时间
 }
 
+// 更新数据字段
+var BackenduserUpdateFields = []string{"Id", "Name", "Email", "Mobile", "Avatar", "IsAdmin", "Active", "Updated"}
+
 //TableName 表名
 func (u *Backenduser) TableName() string {
 	return "admin_backenduser"
@@ -170,15 +173,17 @@ func GetAllBackenduserList(params map[string]interface{}, exclude map[string]int
 	return records, count, err
 }
 
-// UpdateBackenduser 更新
-func UpdateBackenduser(record *Backenduser, fields []string) (int64, error) {
+// UpdateBackenduserByField 更新
+func UpdateBackenduserByField(record *Backenduser, fields ...string) (int64, error) {
 	o := orm.NewOrm()
 	var (
 		num int64
 		err error
 	)
-	if err = o.Read(&record); err == nil {
-		if num, err = o.Update(&record, fields...); err == nil {
+
+	if err = o.Read(&Backenduser{Id: record.Id}); err == nil {
+		record.Updated = utils.NowMillis()
+		if num, err = o.Update(record, fields...); err == nil {
 		}
 	} else if err == orm.ErrNoRows {
 		// 未查询到
