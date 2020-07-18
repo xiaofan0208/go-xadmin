@@ -127,8 +127,8 @@ func (ctl *BackenduserController) Edit() {
 	}
 	ctl.Data["PageName"] = "管理员"
 	ctl.Data["PageDesc"] = "编辑"
-
-	ctl.Data["canDelete"] = true
+	ctl.Data["canDelete"] = true // 可删除
+	ctl.Data["canEdit"] = true   // 可编辑
 	ctl.Data["listURL"] = ctl.URLFor(".Index")
 	ctl.Data["formURL"] = ctl.URLFor(".Edit")
 
