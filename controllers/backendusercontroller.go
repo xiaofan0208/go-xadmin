@@ -89,6 +89,8 @@ func (ctl *BackenduserController) querylist(params map[string]interface{}, exclu
 		one["Name"] = record.Name
 		one["Email"] = record.Email
 		one["IsAdmin"] = record.IsAdmin
+		one["Created"] = record.Created
+		one["Updated"] = record.Updated
 		tablelines = append(tablelines, one)
 	}
 	result := &models.ResponseResult{
