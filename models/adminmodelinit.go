@@ -1,6 +1,6 @@
 package models
 
-import "github.com/xiaofan0208/xbase/utils"
+import "github.com/xiaofan0208/go-xbase/utils"
 
 // InsertAdminUser 插入用户
 func InsertAdminUser() {

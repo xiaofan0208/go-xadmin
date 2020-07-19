@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/astaxie/beego/orm"
-	"github.com/xiaofan0208/xbase/utils"
+	"github.com/xiaofan0208/go-xbase/utils"
 )
 
 //Backenduser 管理用户

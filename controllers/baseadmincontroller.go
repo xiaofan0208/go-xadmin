@@ -3,7 +3,7 @@ package controllers
 import (
 	"strings"
 
-	"github.com/xiaofan0208/xadmin/models"
+	"github.com/xiaofan0208/go-xadmin/models"
 )
 
 //BaseAdminController 后台控制器

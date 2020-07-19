@@ -4,7 +4,7 @@ import (
 	"net/url"
 
 	"github.com/astaxie/beego"
-	"github.com/xiaofan0208/xadmin/models"
+	"github.com/xiaofan0208/go-xadmin/models"
 )
 
 // SignInController 登录页面

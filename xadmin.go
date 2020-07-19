@@ -1,6 +1,6 @@
-package xadmin
+package go-xadmin
 
-import "github.com/xiaofan0208/xadmin/models"
+import "github.com/xiaofan0208/go-xadmin/models"
 
 // InitAdmin 初始化管理员
 func InitAdmin() {

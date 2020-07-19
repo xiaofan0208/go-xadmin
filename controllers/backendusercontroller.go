@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego"
-	"github.com/xiaofan0208/xadmin/models"
+	"github.com/xiaofan0208/go-xadmin/models"
 )
 
 // BackenduserController 管理员
@@ -108,7 +108,7 @@ func (ctl *BackenduserController) querylist(params map[string]interface{}, exclu
 func (ctl *BackenduserController) DeleteBatch() {
 	ids := strings.TrimSpace(ctl.GetString("ids"))
 	if ids == "" {
-		ctl.ResponseError(nil)
+		ctl.ResponseError("错误错误")
 		return
 	}
 	idsArr := strings.Split(ids, ",")
@@ -161,13 +161,13 @@ func (ctl *BackenduserController) PostEdit() {
 	record := &models.Backenduser{}
 	if err := ctl.ParseForm(record); err != nil {
 		beego.Error("ctl.ParseForm : ", err.Error())
-		ctl.ResponseError(nil)
+		ctl.ResponseError("数据解析错误：ctl.ParseForm")
 		return
 	}
 
 	if _, err := models.UpdateBackenduserByField(record, models.BackenduserUpdateFields...); err != nil {
 		beego.Error("models.UpdateBackenduserByField: ", err.Error())
-		ctl.ResponseError(nil)
+		ctl.ResponseError("数据更新错误：" + err.Error())
 		return
 	}
 	ctl.ResponseSuccess(nil)
@@ -197,13 +197,13 @@ func (ctl *BackenduserController) PostCreate() {
 	record := &models.Backenduser{}
 	if err := ctl.ParseForm(record); err != nil {
 		beego.Error("ctl.ParseForm : ", err.Error())
-		ctl.ResponseError(nil)
+		ctl.ResponseError("数据解析错误：ctl.ParseForm")
 		return
 	}
 
 	if _, err := models.CreateBackenduser(record); err != nil {
 		beego.Error("models.CreateBackenduser: ", err.Error())
-		ctl.ResponseError(nil)
+		ctl.ResponseError("数据创建错误：" + err.Error())
 		return
 	}
 	ctl.ResponseSuccess(nil)

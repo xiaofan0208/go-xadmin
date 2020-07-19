@@ -12,3 +12,6 @@ type JSONResult struct {
 	Msg  string      `json:"msg"`
 	Data interface{} `json:"data"`
 }
+
+type JsonResponse struct {
+}

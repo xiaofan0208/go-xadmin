@@ -2,7 +2,8 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/xiaofan0208/xadmin/models"
+	"github.com/xiaofan0208/go-xadmin/models"
+	xbaseModels "github.com/xiaofan0208/go-xbase/models"
 )
 
 // BaseController 基础控制器
@@ -30,21 +31,23 @@ func (ctl *BaseController) ResponseList(code int, msg string, data interface{}) 
 // ResponseSuccess 返回成功
 func (ctl *BaseController) ResponseSuccess(data interface{}) {
 	result := &models.JSONResult{
-		Code: 0,
-		Msg:  "ok",
+		Code: int(xbaseModels.RECODE_OK),
+		Msg:  xbaseModels.RecodeText(xbaseModels.RECODE_OK),
 		Data: data,
 	}
 	ctl.Data["json"] = result
 	ctl.ServeJSON()
+	ctl.StopRun()
 }
 
 // ResponseError 返回失败
-func (ctl *BaseController) ResponseError(data interface{}) {
+func (ctl *BaseController) ResponseError(msg string) {
 	result := &models.JSONResult{
-		Code: 1,
-		Msg:  "error",
-		Data: data,
+		Code: -1,
+		Msg:  msg,
+		Data: nil,
 	}
 	ctl.Data["json"] = result
 	ctl.ServeJSON()
+	ctl.StopRun()
 }

@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"github.com/xiaofan0208/xadmin/controllers"
+	"github.com/xiaofan0208/go-xadmin/controllers"
 
 	"github.com/astaxie/beego"
 )
