@@ -19,7 +19,10 @@ func (ctl *BackenduserController) Index() {
 	ctl.Data["PageName"] = "管理员"
 	ctl.Data["PageDesc"] = "列表"
 	ctl.Data["ShowSearch"] = true // 是否显示搜索框
+	ctl.Data["canDelete"] = true  // 可删除
+	ctl.Data["canCreate"] = true  // 可新建
 
+	ctl.Data["createURL"] = ctl.URLFor(".Create")
 	ctl.SetTpl("", "admin/base/base_list_view.html")
 
 	ctl.LayoutSections = make(map[string]string)
@@ -164,6 +167,42 @@ func (ctl *BackenduserController) PostEdit() {
 
 	if _, err := models.UpdateBackenduserByField(record, models.BackenduserUpdateFields...); err != nil {
 		beego.Error("models.UpdateBackenduserByField: ", err.Error())
+		ctl.ResponseError(nil)
+		return
+	}
+	ctl.ResponseSuccess(nil)
+}
+
+// Create create
+func (ctl *BackenduserController) Create() {
+	if ctl.Ctx.Request.Method == "POST" {
+		ctl.PostCreate()
+		return
+	}
+	ctl.Data["PageName"] = "管理员"
+	ctl.Data["PageDesc"] = "新建"
+	ctl.Data["canCreate"] = true // 可新建
+
+	ctl.Data["listURL"] = ctl.URLFor(".Index")
+	ctl.Data["formURL"] = ctl.URLFor(".Create")
+
+	ctl.SetTpl("admin/user/edit_form.html", "admin/base/base_edit_view.html")
+	ctl.LayoutSections = make(map[string]string)
+	ctl.LayoutSections["HeadCSS"] = "admin/user/edit_headcss.html"
+	ctl.LayoutSections["FooterScripts"] = "admin/user/edit_footerjs.html"
+}
+
+// PostCreate PostCreate
+func (ctl *BackenduserController) PostCreate() {
+	record := &models.Backenduser{}
+	if err := ctl.ParseForm(record); err != nil {
+		beego.Error("ctl.ParseForm : ", err.Error())
+		ctl.ResponseError(nil)
+		return
+	}
+
+	if _, err := models.CreateBackenduser(record); err != nil {
+		beego.Error("models.CreateBackenduser: ", err.Error())
 		ctl.ResponseError(nil)
 		return
 	}

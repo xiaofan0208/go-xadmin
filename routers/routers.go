@@ -22,4 +22,6 @@ func Router() {
 	beego.Router("/admin/backenduser/list", &controllers.BackenduserController{}, "*:PostList")
 	beego.Router("/admin/backenduser/delete", &controllers.BackenduserController{}, "*:DeleteBatch")
 	beego.Router("/admin/backenduser/edit/?:id([0-9]+)", &controllers.BackenduserController{}, "*:Edit")
+	beego.Router("/admin/backenduser/create", &controllers.BackenduserController{}, "*:Create")
+
 }
