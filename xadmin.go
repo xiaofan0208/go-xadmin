@@ -1,4 +1,4 @@
-package go-xadmin
+package xadmin
 
 import "github.com/xiaofan0208/go-xadmin/models"
 
