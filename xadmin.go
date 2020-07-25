@@ -1,6 +1,8 @@
 package xadmin
 
-import "github.com/xiaofan0208/go-xadmin/models"
+import (
+	"github.com/xiaofan0208/go-xadmin/models"
+)
 
 // InitAdmin 初始化管理员
 func InitAdmin() {
@@ -10,4 +12,5 @@ func InitAdmin() {
 // InitMenus 初始化菜单
 func InitMenus() {
 
+	models.InsertMenus()
 }

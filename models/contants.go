@@ -13,5 +13,14 @@ type JSONResult struct {
 	Data interface{} `json:"data"`
 }
 
-type JsonResponse struct {
-}
+// type JsonResponse struct {
+// }
+
+//ResourceType 资源类型
+type ResourceType = int64
+
+const (
+	PanelType   ResourceType = 1 //1：panel
+	MenuType    ResourceType = 2 //2：菜单
+	BtnResource ResourceType = 3 //3：按钮
+)
