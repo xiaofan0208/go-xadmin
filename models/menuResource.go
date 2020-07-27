@@ -24,6 +24,7 @@ type MenuResource struct {
 	Deleted bool   `orm:"column(deleted)" json:"deleted"` // 是否删除
 
 	Children []*MenuResource `orm:"-" json:"children"`
+	Active   bool            `orm:"-" json:"active"`
 }
 
 // 更新数据字段
@@ -44,7 +45,7 @@ func InsertMenuResource(menus []*MenuResource) error {
 	// 获取所有菜单
 	param := make(map[string]interface{})
 	param["Deleted"] = false
-	param["Status"] = 1
+	param["Status"] = STATUS_NORMAL
 	allmenus, _, err := GetMenuResourceByParam(param, 0, 0)
 	if err != nil {
 		return err
@@ -87,7 +88,7 @@ func insertMenuResource(o orm.Ormer, allMenusMap map[int64]*MenuResource, menu *
 	record.Deleted = false
 	record.Created = utils.NowMillis()
 	record.Updated = record.Created
-	record.Status = 1
+	record.Status = STATUS_NORMAL
 	record.Pid = pid
 
 	var isExist bool = false

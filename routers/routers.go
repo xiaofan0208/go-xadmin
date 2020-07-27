@@ -16,6 +16,7 @@ func Router() {
 	beego.Router("/admin/login", &controllers.SignInController{})
 	// 所有 /admin/* 路由需要检测是否登录
 	beego.InsertFilter("/admin/*", beego.BeforeRouter, LoginFilterFunc)
+	beego.InsertFilter("/admin/*", beego.BeforeRouter, MenuFilterFunc)
 	// 后台首页
 	beego.Router("/admin", &controllers.AdminIndexController{}, "*:Index")
 	// 管理员管理

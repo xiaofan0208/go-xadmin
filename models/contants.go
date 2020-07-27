@@ -24,3 +24,8 @@ const (
 	MenuType    ResourceType = 2 //2：菜单
 	BtnResource ResourceType = 3 //3：按钮
 )
+
+const (
+	STATUS_NORMAL   uint8 = 1 // 正常
+	STATUS_ABNORMAL uint8 = 2
+)
