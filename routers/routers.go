@@ -25,7 +25,8 @@ func Router() {
 	beego.Router("/admin/backenduser/delete", &controllers.BackenduserController{}, "*:DeleteBatch")
 	beego.Router("/admin/backenduser/edit/?:id([0-9]+)", &controllers.BackenduserController{}, "*:Edit")
 	beego.Router("/admin/backenduser/create", &controllers.BackenduserController{}, "*:Create")
-
+	// 菜单管理
+	beego.Router("/admin/menus", &controllers.MenuController{}, "*:Index")
 }
 
 // InitMenu 初始化菜单
@@ -33,14 +34,19 @@ func InitMenu() {
 	// 1.基本信息
 	baseAdminInfo := &models.MenuResource{Title: "基本信息", Type: models.MenuType, Name: "baseAdminInfo", Icon: "far fa-circle"}
 	// [1].管理员管理
-	backenduser := &models.MenuResource{Title: "管理员管理", Type: models.MenuType, Name: "backenduser", Icon: "fas fa-tachometer-alt", UrlFor: "BackenduserController.Index"}
-	backenduserQuery := &models.MenuResource{Title: "查询", Type: models.BtnResource, Name: "query", Icon: "far fa-circle"}
-	backenduserAdd := &models.MenuResource{Title: "新增", Type: models.BtnResource, Name: "add", Icon: "far fa-circle"}
-	backenduserEdit := &models.MenuResource{Title: "修改", Type: models.BtnResource, Name: "edit", Icon: "far fa-circle"}
-	backenduserDel := &models.MenuResource{Title: "删除", Type: models.BtnResource, Name: "del", Icon: "far fa-circle"}
+	backenduser := &models.MenuResource{Title: "管理员管理", Type: models.MenuType, Name: "backenduser", Icon: "fas fa-users", UrlFor: "BackenduserController.Index"}
+	backenduserQuery := &models.MenuResource{Title: "查询", Type: models.BtnResource, Name: "query"}
+	backenduserAdd := &models.MenuResource{Title: "新增", Type: models.BtnResource, Name: "add"}
+	backenduserEdit := &models.MenuResource{Title: "修改", Type: models.BtnResource, Name: "edit"}
+	backenduserDel := &models.MenuResource{Title: "删除", Type: models.BtnResource, Name: "del"}
 	backenduser.Children = []*models.MenuResource{backenduserQuery, backenduserAdd, backenduserEdit, backenduserDel}
+	// [2].权限管理
+	rabcmenu := &models.MenuResource{Title: "权限管理", Type: models.MenuType, Name: "rabcmenu", Icon: "fas fa-wrench"}
+	menuManage := &models.MenuResource{Title: "菜单管理", Type: models.MenuType, Name: "menuManage", Icon: "fas fa-globe", UrlFor: "MenuController.Index"}
+	roleManage := &models.MenuResource{Title: "角色管理", Type: models.MenuType, Name: "roleManage", Icon: "fas fa-user"}
+	rabcmenu.Children = []*models.MenuResource{menuManage, roleManage}
 
-	baseAdminInfo.Children = []*models.MenuResource{backenduser}
+	baseAdminInfo.Children = []*models.MenuResource{backenduser, rabcmenu}
 
 	models.AddMenus(baseAdminInfo)
 }

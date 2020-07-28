@@ -14,7 +14,8 @@ type BaseController struct {
 
 // Prepare  prepare
 func (ctl *BaseController) Prepare() {
-
+	site_name := beego.AppConfig.String("site_name")
+	ctl.Data["SiteName"] = site_name
 }
 
 // ResponseList 返回结果

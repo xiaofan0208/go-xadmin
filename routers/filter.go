@@ -68,11 +68,11 @@ var MenuFilterFunc = func(ctx *context.Context) {
 func resourceAddSons(cur *models.MenuResource, list, result []*models.MenuResource) []*models.MenuResource {
 	for _, item := range list {
 		if item.Pid == cur.Id {
+			children := resourceAddSons(item, list, item.Children)
+			item.Children = children
 			if item.Active == true {
 				cur.Active = true
 			}
-			children := resourceAddSons(item, list, item.Children)
-			item.Children = children
 			result = append(result, item)
 		}
 	}
