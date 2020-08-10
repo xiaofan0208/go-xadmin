@@ -27,6 +27,9 @@ func Router() {
 	beego.Router("/admin/backenduser/create", &controllers.BackenduserController{}, "*:Create")
 	// 菜单管理
 	beego.Router("/admin/menus", &controllers.MenuController{}, "*:Index")
+	beego.Router("/admin/menus/treegrid", &controllers.MenuController{}, "*:TreeGrid")
+	// 角色管理
+	beego.Router("/admin/role", &controllers.RoleController{}, "*:Index")
 }
 
 // InitMenu 初始化菜单
@@ -43,7 +46,7 @@ func InitMenu() {
 	// [2].权限管理
 	rabcmenu := &models.MenuResource{Title: "权限管理", Type: models.MenuType, Name: "rabcmenu", Icon: "fas fa-wrench"}
 	menuManage := &models.MenuResource{Title: "菜单管理", Type: models.MenuType, Name: "menuManage", Icon: "fas fa-globe", UrlFor: "MenuController.Index"}
-	roleManage := &models.MenuResource{Title: "角色管理", Type: models.MenuType, Name: "roleManage", Icon: "fas fa-user"}
+	roleManage := &models.MenuResource{Title: "角色管理", Type: models.MenuType, Name: "roleManage", Icon: "fas fa-user", UrlFor: "RoleController.Index"}
 	rabcmenu.Children = []*models.MenuResource{menuManage, roleManage}
 
 	baseAdminInfo.Children = []*models.MenuResource{backenduser, rabcmenu}
