@@ -30,6 +30,10 @@ func Router() {
 	beego.Router("/admin/menus/treegrid", &controllers.MenuController{}, "*:TreeGrid")
 	// 角色管理
 	beego.Router("/admin/role", &controllers.RoleController{}, "*:Index")
+	beego.Router("/admin/role/list", &controllers.RoleController{}, "*:PostList")
+	beego.Router("/admin/role/create", &controllers.RoleController{}, "*:Create")
+	beego.Router("/admin/role/edit/?:id([0-9]+)", &controllers.RoleController{}, "*:Edit")
+	beego.Router("/admin/role/delete", &controllers.RoleController{}, "*:DeleteBatch")
 }
 
 // InitMenu 初始化菜单
